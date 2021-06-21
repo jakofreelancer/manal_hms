@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/manal_hms/static/css/main.b143fb81.chunk.css",
+    "main.js": "/manal_hms/static/js/main.734b9a12.chunk.js",
+    "main.js.map": "/manal_hms/static/js/main.734b9a12.chunk.js.map",
+    "runtime-main.js": "/manal_hms/static/js/runtime-main.3dbece23.js",
+    "runtime-main.js.map": "/manal_hms/static/js/runtime-main.3dbece23.js.map",
+    "static/css/2.b4e56faa.chunk.css": "/manal_hms/static/css/2.b4e56faa.chunk.css",
+    "static/js/2.cadc129c.chunk.js": "/manal_hms/static/js/2.cadc129c.chunk.js",
+    "static/js/2.cadc129c.chunk.js.map": "/manal_hms/static/js/2.cadc129c.chunk.js.map",
+    "static/js/3.b3be8c0a.chunk.js": "/manal_hms/static/js/3.b3be8c0a.chunk.js",
+    "static/js/3.b3be8c0a.chunk.js.map": "/manal_hms/static/js/3.b3be8c0a.chunk.js.map",
+    "index.html": "/manal_hms/index.html",
+    "static/css/2.b4e56faa.chunk.css.map": "/manal_hms/static/css/2.b4e56faa.chunk.css.map",
+    "static/css/main.b143fb81.chunk.css.map": "/manal_hms/static/css/main.b143fb81.chunk.css.map",
+    "static/js/2.cadc129c.chunk.js.LICENSE.txt": "/manal_hms/static/js/2.cadc129c.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.3dbece23.js",
+    "static/css/2.b4e56faa.chunk.css",
+    "static/js/2.cadc129c.chunk.js",
+    "static/css/main.b143fb81.chunk.css",
+    "static/js/main.734b9a12.chunk.js"
+  ]
+}
