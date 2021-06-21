@@ -11,7 +11,7 @@ export const signupUser = ( uId,
                             description, 
                             userRole,
                             createdDate, 
-                            lastModifiedDate
+                            modifiedDate
                         ) => {
     return function(dispatch) {
         dispatch(signupUserStart());
@@ -27,11 +27,11 @@ export const signupUser = ( uId,
             description,
             userRole,
             createdDate,
-            lastModifiedDate,
+            modifiedDate,
             returnSecureToken: true
         };
 
-        db.collection("users").add({
+        db.collection("employees").doc(uId).set({
             uId,
             email,
             password,
@@ -42,7 +42,7 @@ export const signupUser = ( uId,
             description,
             userRole,
             createdDate,
-            lastModifiedDate,
+            modifiedDate,
             returnSecureToken: true
         });
 
@@ -63,8 +63,10 @@ export const signupUser = ( uId,
                 localStorage.setItem("expireDate", expireDate);
                 localStorage.setItem("refreshToken", refreshToken);
                 localStorage.setItem("userRole", userRole);
+                localStorage.setItem("lname", lname);
+                localStorage.setItem("fname", fname);
 
-                dispatch(signupUserSuccess(token, userId, userRole));
+                dispatch(signupUserSuccess(token, userId, userRole, lname, fname));
             })
             .catch(err => {
                 dispatch(signupUserError(err));
@@ -78,12 +80,14 @@ export const signupUserStart = () => {
     };
 };
 
-export const signupUserSuccess = (token, userId, userRole) => {
+export const signupUserSuccess = (token, userId, userRole, lname, fname) => {
     return {
         type: "SIGNUP_USER_SUCCESS",
         token,
         userId,
-        userRole
+        userRole,
+        lname,
+        fname
     };
 };
 

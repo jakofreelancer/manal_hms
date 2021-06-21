@@ -24,20 +24,26 @@ export const loginUser = (email, password) => {
                 const expireDate = new Date(new Date().getTime() + expiresIn * 1000);
                 const refreshToken = result.data.refreshToken;
                 var userRole = null;
+                var fname = null;
+                var lname = null;
 
-                db.collection("users").where("uId", "==", userId)
+                db.collection("employees").where("uId", "==", userId)
                     .get()
                     .then((querySnapshot) => {
                         querySnapshot.forEach((doc) => {
                             // doc.data() is never undefined for query doc snapshots
                             userRole = doc.data().userRole;
+                            fname = doc.data().fname;
+                            lname = doc.data().lname;
                             localStorage.setItem("userRole", userRole);
                             localStorage.setItem("token", token);
                             localStorage.setItem("userId", userId);
                             localStorage.setItem("expireDate", expireDate);
                             localStorage.setItem("refreshToken", refreshToken);
+                            localStorage.setItem("lname", lname);
+                            localStorage.setItem("fname", fname);
 
-                            dispatch(loginUserSuccess(token, userId, userRole));
+                            dispatch(loginUserSuccess(token, userId, userRole, lname, fname));
                         });
                     })
                     .catch((error) => {
@@ -59,12 +65,14 @@ export const loginUserStart = () => {
     };
 };
 
-export const loginUserSuccess = (token, userId, userRole) => {
+export const loginUserSuccess = (token, userId, userRole, lname, fname) => {
     return {
         type: "LOGIN_USER_SUCCESS",
         token,
         userId,
-        userRole
+        userRole,
+        lname,
+        fname
     };
 };
 
@@ -81,6 +89,8 @@ export const logout = () => {
     localStorage.removeItem("expireDate");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("userRole");
+    localStorage.removeItem("lname");
+    localStorage.removeItem("fname");
     
     return {
         type: "LOGOUT"

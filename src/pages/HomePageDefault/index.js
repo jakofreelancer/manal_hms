@@ -1,19 +1,11 @@
 import React from 'react';
-import Toolbar from "../../components/General/Toolbar";
 import { connect } from "react-redux";
+// import AppointmentContainer from '../../components/AppointmentContainer';
+// import css from "./style.module.css";
 
 const Home = props => {
     return (
         <>
-            <Toolbar />
-            {props.userId} <br/>
-            {props.userId} <br/>
-            {props.userId} <br/>
-            {props.userId} <br/>
-            {props.userId} <br/>
-            {props.userId} <br/>
-            {props.userId} <br/>
-            {props.userId}
         </>
     );
 };

@@ -6,6 +6,9 @@ import * as actions from '../../redux/actions/signupActions';
 import Spinner from "../../components/General/Spinner";
 import { Redirect } from 'react-router-dom';
 import firebase from "../../firebase";
+import css from "./style.module.css";
+import TextBox from '../../components/General/TextBox';
+import SelectComponent from '../../components/General/SelectComponent';
 //import css from "./style.module.css";
 
 const Signup = props => {
@@ -20,37 +23,103 @@ const Signup = props => {
     const [description, setDescription] = useState("");
     const [userRole, setUserRole] = useState("");
     // const [createdDate, setCreatedDate] = useState("");
-    // const [lastModifiedDate, setLastModifiedDate] = useState("");
+    // const [modifiedDate, setModifiedDate] = useState("");
+    const optionsUserRole = [
+        {value: "admin", label: "Админ"},
+        {value: "reception", label: "Ресепшн"},
+        {value: "doctor", label: "Эмч"}
+    ];
 
-    const signup = (e) => {
-        e.preventDefault();
-        if(password1 === password2) {
-            const currentDate = new Date();
+    const [employeeInfo, setEmployeeInfo] = useState({
+        email: "",
+        lname: "",
+        fname: "",
+        regNo: "",
+        phoneNo: "",
+        userRole: "",
+        password1: "",
+        password2: "",
+        description: "",
+    });
 
-            firebase
-                .auth()
-                .createUserWithEmailAndPassword(email, password1)
-                .then((user) => {
-                    resetInput();
-                    props.signupUser(user.user.uid, email, password1, lname, fname, regNo, phoneNo, description, userRole, currentDate, currentDate);
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+    const [formCheck, setFormCheck] = useState({
+        // errorMark: { required талбаруудын анхны утга true байх! энэ нь бөглөөгүй шууд submit хийсэн үед алдаа үзүүлэх зорилготой
+        email: true,
+        lname: true,
+        fname: true,
+        regNo: true,
+        phoneNo: true,
+        userRole: true,
+        password1: true,
+        password2: true,
+        description: "",
+    });
+
+    const [formErrors, setFormErrors] = useState({ lname: "", fname: "" });
+
+    const asyncGetData = async () => {
+        const currentDate = new Date();
+
+        firebase
+            .auth()
+            .createUserWithEmailAndPassword(employeeInfo.email, employeeInfo.password1)
+            .then((user) => {
+                console.log("3. inside of fb function!");
+                resetInput();
+                props.signupUser(
+                    user.user.uid, 
+                    employeeInfo.email, 
+                    employeeInfo.password1, 
+                    employeeInfo.lname, 
+                    employeeInfo.fname, 
+                    employeeInfo.regNo, 
+                    employeeInfo.phoneNo, 
+                    employeeInfo.description, 
+                    employeeInfo.userRole, 
+                    currentDate, 
+                    currentDate
+                );
+            })
+            .then(() => {
+                console.log("Appointment time successfuly written!");
+                alert("Бүртгэл амжилттай");
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
+    const submit = (e) => {
+        console.log("1. abc", employeeInfo);
+        console.log("pass1", employeeInfo.password1);
+        console.log("pass2", employeeInfo.password2);
+
+        if(employeeInfo.password1 === employeeInfo.password2) {
+            console.log("2. inside of if");
+            asyncGetData();
         } else {
             setError("Нууц үгнүүд хоорондоо таарахгүй байна");
         }
+
+        console.log(error);
+        console.log(error.error);
     };
 
     const resetInput = () => {
-        setEmail("");
-        setPassword1("");
-        setPassword2("");
-        setLname("");
-        setFname("");
-        setRegNo("");
-        setPhoneNo("");
-        setDescription("");
+        alert("resetInput worked!");
+        console.log("4. resetInput worked!");
+        setEmployeeInfo({...employeeInfo, email: ""});
+        setEmployeeInfo({...employeeInfo, password1: ""});
+        setEmployeeInfo({...employeeInfo, password2: ""});
+        setEmployeeInfo({...employeeInfo, lname: ""});
+        setEmployeeInfo({...employeeInfo, fname: ""});
+        setEmployeeInfo({...employeeInfo, regNo: ""});
+        setEmployeeInfo({...employeeInfo, phoneNo: ""});
+        setEmployeeInfo({...employeeInfo, description: ""});
+    };
+
+    const onChange = e => {
+        // console.log("testing select change: ", e.value, userRole);
     };
 
     var jumpPage = null;
@@ -71,164 +140,113 @@ const Signup = props => {
     };
 
     return (
-        <div className="columns is-multiline">
-            {
+        <div className={css.Container}>
+            {/* {
                 (jumpPage !== null) ? jumpPage : ""
 
-            }
-            
-            <div className="column is-8 is-offset-2 register">
-                <div className="columns">
-                    <div className="column left">
-                        <h1 className="title is-1">МАНАЛ</h1>
-                        <h2 className="subtitle colored is-4">
-                            Эмнэлгийн удирдлагын систем
-                        </h2>
-                    </div>
-                    <div className="column right has-text-centered">
-                        <form>
-                            <div className="field">
-                                <div className="control">
-                                    <input
-                                    onChange={el => setEmail(el.target.value)}
-                                    className="input is-medium"
-                                    type="email"
-                                    placeholder="И-мэйл хаяг"
-                                    />
-                                </div>
-                            </div>
-                            <div className="field">
-                                <div className="control">
-                                    <input
-                                    onChange={el => setLname(el.target.value)}
-                                    className="input is-medium"
-                                    type="text"
-                                    placeholder="Овог"
-                                    />
-                                </div>
-                            </div>
-                            <div className="field">
-                                <div className="control">
-                                    <input
-                                    onChange={el => setFname(el.target.value)}
-                                    className="input is-medium"
-                                    type="text"
-                                    placeholder="Нэр"
-                                    />
-                                </div>
-                            </div>
-                            <div className="field">
-                                <div className="control">
-                                    <input
-                                    onChange={el => setRegNo(el.target.value)}
-                                    className="input is-medium"
-                                    type="text"
-                                    placeholder="Регистрийн дугаар"
-                                    />
-                                </div>
-                            </div>
-                            <div className="field">
-                                <div className="control">
-                                    <input
-                                    onChange={el => setPhoneNo(el.target.value)}
-                                    className="input is-medium"
-                                    type="text"
-                                    placeholder="Утас"
-                                    />
-                                </div>
-                            </div>
-                            <div className="field">
-                                <div className="control">
-                                    <div className="select is-medium">
-                                        <select onChange={el => {
-                                            (el.target.value !== "0") ? setUserRole(el.target.value) : alert("Эрхээ сонгоно уу");
-                                        }}>
-                                            <option value="0">Эрхээ сонгоно уу</option>
-                                            <option value="admin">Админ</option>
-                                            <option value="reception">Ресепшн</option>
-                                            <option value="doctor">Эмч</option>
-                                        </select>
-                                        
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="field">
-                                <div className="control">
-                                    <textarea 
-                                        onChange={el => setDescription(el.target.value)}
-                                        className="input is-medium"
-                                        type="text"
-                                        placeholder="Тайлбар"
-                                    ></textarea>
-                                </div>
-                            </div>
-                            <div className="field">
-                                <div className="control">
-                                    <input
-                                    onChange={el => setPassword1(el.target.value)}
-                                    className="input is-medium"
-                                    type="password"
-                                    placeholder="Нууц үг"
-                                    />
-                                </div>
-                            </div>
-                            <div className="field">
-                                <div className="control">
-                                    <input
-                                    onChange={el => setPassword2(el.target.value)}
-                                    className="input is-medium"
-                                    type="password"
-                                    placeholder="Нууц үгээ давтана уу"
-                                    />
-                                </div>
-                            </div>
-                            {props.authServerError && <div style={{ color: "red" }}>{props.authServerError}</div>}
-                            {props.saving && <Spinner />}
-                            <Button text="Бүртгүүлэх" clicked={signup} />
-                            <br />
-                            <small>
-                                <em>Нууц үгээ мартсан?</em>
-                            </small>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div className="column is-8 is-offset-2">
-                <br />
-                <nav className="level">
-                    <div className="level-left">
-                        <div className="level-item">
-                            <span className="icon">
-                                <i className="fab fa-twitter" />
-                            </span>{" "}
-                     
-                            <span className="icon">
-                            <i className="fab fa-facebook" />
-                            </span>{" "}
-                             
-                            <span className="icon">
-                            <i className="fab fa-instagram" />
-                            </span>{" "}
-                             
-                            <span className="icon">
-                            <i className="fab fa-github" />
-                            </span>{" "}
-                             
-                            <span className="icon">
-                            <i className="fas fa-envelope" />
-                            </span>
-                        </div>
-                    </div>
-                    <div className="level-right">
-                        <small
-                            className="level-item"
-                            style={{ color: "var(--textLight)" }}
-                        >
-                            Chandmani Solutions © Зохиогчийн эрхээр хамгаалагдсан 2021
-                        </small>
-                    </div>
-                </nav>
-            </div>
+            } */}
+
+            <TextBox 
+                label="Имэйл" 
+                name="email"
+                type="email"
+                setComponentInfo={setEmployeeInfo}
+                componentInfo={employeeInfo["email"]}
+                componentAllInfo={employeeInfo}
+                setWarning={setFormErrors}
+                warning={formErrors["email"]}
+                allwarnings={formErrors}
+                setFormCheck={setFormCheck}
+                formCheckInfo={formCheck} />
+            <TextBox 
+                label="Овог"
+                name="lName"
+                setComponentInfo={setEmployeeInfo}
+                componentInfo={employeeInfo["lname"]}
+                componentAllInfo={employeeInfo}
+                setWarning={setFormErrors}
+                warning={formErrors["lname"]}
+                allwarnings={formErrors}
+                setFormCheck={setFormCheck}
+                formCheckInfo={formCheck} />
+            <TextBox 
+                label="Нэр" 
+                name="fName" 
+                setComponentInfo={setEmployeeInfo}
+                componentInfo={employeeInfo["fname"]}
+                componentAllInfo={employeeInfo}
+                setWarning={setFormErrors}
+                warning={formErrors["fname"]}
+                allwarnings={formErrors}
+                setFormCheck={setFormCheck}
+                formCheckInfo={formCheck} />
+            <TextBox 
+                label="Регистрийн дугаар" 
+                name="regNo"
+                setComponentInfo={setEmployeeInfo}
+                componentInfo={employeeInfo["regNo"]}
+                componentAllInfo={employeeInfo}
+                setWarning={setFormErrors}
+                warning={formErrors["regNo"]}
+                allwarnings={formErrors}
+                setFormCheck={setFormCheck}
+                formCheckInfo={formCheck} />
+            <TextBox 
+                label="Утас" 
+                name="phoneNo"
+                setComponentInfo={setEmployeeInfo}
+                componentInfo={employeeInfo["phoneNo"]}
+                componentAllInfo={employeeInfo}
+                setWarning={setFormErrors}
+                warning={formErrors["phoneNo"]}
+                allwarnings={formErrors}
+                setFormCheck={setFormCheck}
+                formCheckInfo={formCheck} />
+            <SelectComponent label="Хэрэглэгчийн эрх" options={optionsUserRole} onchangefunc={(e) => {setEmployeeInfo({...employeeInfo, userRole: e.value}); onChange(e)}} />
+            <TextBox 
+                label="Тайлбар" 
+                name="description"
+                setComponentInfo={setEmployeeInfo}
+                componentInfo={employeeInfo["description"]}
+                componentAllInfo={employeeInfo}
+                setWarning={setFormErrors}
+                warning={formErrors["description"]}
+                allwarnings={formErrors}
+                setFormCheck={setFormCheck}
+                formCheckInfo={formCheck} />
+            <TextBox 
+                label="Нууц үг" 
+                name="password1" 
+                type="password"
+                setComponentInfo={setEmployeeInfo}
+                componentInfo={employeeInfo["password1"]}
+                componentAllInfo={employeeInfo}
+                setWarning={setFormErrors}
+                warning={formErrors["password1"]}
+                allwarnings={formErrors}
+                setFormCheck={setFormCheck}
+                formCheckInfo={formCheck} />
+            <TextBox 
+                label="Нууц үг давтах" 
+                name="password2"
+                type="password"
+                setComponentInfo={setEmployeeInfo}
+                componentInfo={employeeInfo["password2"]}
+                componentAllInfo={employeeInfo}
+                setWarning={setFormErrors}
+                warning={formErrors["password2"]}
+                allwarnings={formErrors}
+                setFormCheck={setFormCheck}
+                formCheckInfo={formCheck} />
+
+            <br/><br/>
+            {props.authServerError && <div style={{ color: "red" }}>{props.authServerError}</div>}
+            {props.saving && <Spinner />}
+            <Button text="Бүртгүүлэх" clicked={submit} />
+            <br />
+            {/* <small>
+                <em>Нууц үгээ мартсан?</em>
+            </small> */}
         </div>
     );
 };
@@ -255,7 +273,7 @@ const mapDispatchToProps = dispatch => {
                         description, 
                         userRole,
                         createdDate, 
-                        lastModifiedDate
+                        modifiedDate
                     ) => 
             dispatch(actions.signupUser(uId,
                                         email, 
@@ -267,7 +285,7 @@ const mapDispatchToProps = dispatch => {
                                         description, 
                                         userRole,
                                         createdDate, 
-                                        lastModifiedDate))
+                                        modifiedDate))
     };
 };
 

@@ -8,8 +8,7 @@ const Logout = (props) => {
         props.logout();
     }, []);
 
-    // return <Redirect to="/" />;
-    return <div>logout</div>;
+    return <Redirect to="/" />;
 }
 
 const mapDispatchToProps = dispatch => {

@@ -4,7 +4,7 @@ import Spinner from "../components/General/Spinner";
 
 export const AuthContext = React.createContext();
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ( props ) => {
 	const [currentUser, setCurrentUser] = useState(null);
 	const [loading, setLoading] = useState(true);
 
@@ -19,13 +19,23 @@ export const AuthProvider = ({ children }) => {
 		return (
 			<div
 				style={{
-					display: "flex",
-					alignItems: "center",
-					justifyContent: "center",
-					height: "80vh",
+					// display: "flex",
+					// alignItems: "center",
+					// justifyContent: "center",
+					// height: "80vh",
+					// backgroundColor: "red",
+					display: "block",
+					position: "fixed",
+					zIndex: "1031",
+					top: "30%",
+					right: "50%",
+					marginTop: "-..px"
+					// left: "1000px",
+					// left: "500px",
+					// marginLeft: "-4em"
 				}}
 			>
-				<h1>Loading User...</h1>
+				{/* <h1>Loading User...</h1> */}
                 <Spinner />
 			</div>
 		);
@@ -37,7 +47,7 @@ export const AuthProvider = ({ children }) => {
 				currentUser
 			}}
 		>
-			{children}
+			{props.children}
 		</AuthContext.Provider>
 	);
 };

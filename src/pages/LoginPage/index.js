@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import './style.css';
 import Button from '../../components/General/Button';
@@ -14,6 +14,12 @@ const Login = props => {
     e.preventDefault();
     props.login(form.email, form.password);
   };
+
+  const inputRef = React.createRef();
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   return (
     <div className="columns is-multiline">
@@ -31,10 +37,11 @@ const Login = props => {
               <div className="field">
                 <div className="control">
                   <input
+                    ref={inputRef}
                     onChange={el => setForm(formBefore => ({
-                                      email: el.target.value,
-                                      password: formBefore.password
-                                    }))}
+                      email: el.target.value,
+                      password: formBefore.password
+                    }))}
                     className="input is-medium"
                     type="email"
                     placeholder="И-мэйл хаяг"
@@ -45,9 +52,9 @@ const Login = props => {
                 <div className="control">
                   <input
                     onChange={el => setForm(formBefore => ({
-                                      email: formBefore.email,
-                                      password: el.target.value
-                                    }))}
+                      email: formBefore.email,
+                      password: el.target.value
+                    }))}
                     className="input is-medium"
                     type="password"
                     placeholder="Нууц үг"

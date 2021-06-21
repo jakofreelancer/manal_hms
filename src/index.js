@@ -9,6 +9,7 @@ import App from './pages/App';
 import reportWebVitals from "./reportWebVitals";
 
 import signupLoginReducer from "./redux/reducer/signupLoginReducer";
+import appointmentReducer from "./redux/reducer/appointmentReducer";
 
 const loggerMiddleware = store => {
   return next => {
@@ -25,7 +26,8 @@ const loggerMiddleware = store => {
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const reducers = combineReducers({
-  signupLoginReducer
+  signupLoginReducer,
+  appointmentReducer
 });
 
 const middlewares = [loggerMiddleware, thunk];

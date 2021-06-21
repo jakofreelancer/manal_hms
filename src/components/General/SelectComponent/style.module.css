@@ -1,0 +1,50 @@
+* {box-sizing: border-box;}
+
+.Container {
+    display: flex;
+    margin-top: 10px;
+}
+
+.IconStyleCorrect {
+    /* padding: 10px; */
+    /* position: absolute; */
+    margin-top: 10px;
+    color: green;
+    right: 100px;
+    min-width: 20px;
+    /* padding: 5px; */
+    /* z-index: 10; */
+
+    /* background-color: purple; */
+    /* padding-left: 100px; */
+}
+
+.IconStyleWrong {
+    color: #b33a3a;
+    margin-top: 10px;
+    right: 100px;
+    min-width: 20px;
+}
+
+.FormControl {
+    margin-top: 10px;
+}
+
+.Label {
+    font-size: 12px;
+    color: #666666;
+    line-height: 1.2;
+    text-transform: uppercase;
+    padding: 15px 0 2px 24px;
+    font-weight: 500;
+}
+
+.Select {
+    width: 100%;
+    margin-bottom: 14px;
+    min-height: 40px;
+    outline: none;
+    border: none;
+    font-weight: 600;
+    padding: 0px 20px;
+}

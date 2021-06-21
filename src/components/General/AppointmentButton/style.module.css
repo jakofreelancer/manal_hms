@@ -1,0 +1,20 @@
+.AppointmentButton {
+    background-color: #95dada;
+    border: 1px solid gray;
+    /* margin: 30px auto 10px auto;
+    padding: 10px 20px 20px 10px; */
+    height: 80px;
+    width: 140px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    padding: 25px;
+    margin: auto auto;
+    cursor: pointer;
+    align-items: center;
+    transition: transform 0.15s ease-out;
+}
+
+.AppointmentButton:hover {
+    transform: scale(1.15);
+}

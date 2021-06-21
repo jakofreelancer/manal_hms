@@ -1,0 +1,101 @@
+.Profile {
+    /* width: 100%;
+    min-height: 100vh;
+    display: block;
+    padding: 10px 55px 55px 55px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent; */
+    margin: 20px 60px 10px;
+    min-height: 100vh;
+    width: 100%;
+    background-color: white;
+    padding: 20px 50px 10px 50px;
+    border-radius: 10px;
+}
+
+.ProfileUpdateForm {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    display: block;
+    height: 100%;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.Input {
+    height: 48px;
+    display: block;
+    width: 100%;
+    background: transparent;
+    border-radius: 4px;
+    font-family: Montserrat-Regular;
+    font-size: 18px;
+    color: #404b46;
+    line-height: 1.2;
+    padding: 0 26px;
+    outline: none;
+    border: none;
+    overflow: visible;
+    margin: 0;
+    touch-action: manipulation;
+    box-sizing: border-box;
+    -webkit-writing-mode: horizontal-tb !important;
+    text-rendering: auto;
+    letter-spacing: normal;
+    word-spacing: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    text-align: start;
+    appearance: auto;
+    -webkit-rtl-ordering: logical;
+    cursor: text;
+    font: 400 13.3333px Arial;
+}
+
+.TimeBoxContainer {
+    /* height: auto;
+    margin: 30px auto 10px auto;
+    padding: 10px 20px 20px 10px; */
+    padding-top: 45px;
+    width: 75vw;
+    margin: 20px auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 30px;
+}
+
+.TimeBox {
+    background-color: #95dada;
+    border: 1px solid gray;
+    /* margin: 30px auto 10px auto;
+    padding: 10px 20px 20px 10px; */
+    height: 80px;
+    width: 140px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    padding: 25px;
+    margin: auto auto;
+    cursor: pointer;
+    align-items: center;
+    transition: transform 0.15s ease-out;
+}
+
+.TimeBox:hover {
+    transform: scale(1.15);
+}
