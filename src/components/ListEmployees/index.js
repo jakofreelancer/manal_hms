@@ -49,7 +49,11 @@ const ListEmployees = () => {
             try {
                 const values = await form.validateFields();
                 toggleEdit();
+                console.log("all r&v", { ...record, ...values });
                 handleSave({ ...record, ...values });
+                // console.log("record", record);
+                // console.log("values", values);
+                // console.log("all r&v", { ...record, ...values });
             } catch (errInfo) {
                 console.log('Save failed:', errInfo);
             }
@@ -66,8 +70,8 @@ const ListEmployees = () => {
                     name={dataIndex}
                     rules={[
                         {
-                        required: true,
-                        message: `${title} is required.`,
+                            required: true,
+                            message: `${title} is required.`,
                         },
                     ]}
                 >
@@ -143,25 +147,29 @@ const ListEmployees = () => {
 
     const updateEmployee = (changes, old, latest) => {
         var uId = changes["uId"];
-        console.log("all changes", changes);
-        console.log("update uId", uId);
+        // console.log("all changes", changes);
+        // console.log("update uId", uId);
         delete changes["uId"];
+        var dateModified = new Date();
+        dateModified = dateModified.getUTCDate()+"/"+(dateModified.getMonth()+1)+"/"+dateModified.getUTCFullYear();
         changes["modifiedDate"] = new Date();
-        console.log("data", changes);
+        changes["modifiedDateFormatted"] = dateModified;
+        // console.log("data", changes);
 
         let employeesRef = db.collection("employees")
         // let dataRef = await employeesRef.get();
         // employeesRef.where("uId", "==", uId).get().then
-        console.log("update change", changes);
-        console.log("check", {...employees, changes});
-        employeesRef.doc(uId).update(changes)
-            .then(() => {
-                setEmployees(changes);
-                alert("Updated!!!");
-            })
-            .catch((error) => {
-                alert("error occured!!!"+error);
-            })
+        // console.log("update change", changes);
+        // console.log("latest", latest);
+        // console.log("check", {...employees, changes});
+        employeesRef.doc(""+uId).update(changes)
+        .then(() => {
+            setEmployees(latest);
+            alert("Амжилттай шинэчиллээ!!!");
+        })
+        .catch((error) => {
+            alert("error occured!!!"+error);
+        })
     }
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -201,24 +209,33 @@ const ListEmployees = () => {
     const handleSave = (row) => {
         console.log("old", [...oldDataStorage]);
         const newData = [...employees];
-        const index = newData.findIndex((item) => row.key === item.key);
+
+        console.log("[...employees]", [...employees]);
+        const index = newData.findIndex((item) => {
+            console.log("itemmmmm=> ", item, row);
+            if (row.key === item.key)
+                return item
+        });
+        console.log("handleSave index", index);
         const item = newData[index];
+        console.log("handleSave item", item);
         newData.splice(index, 1, { ...item, ...row });
+        console.log("handleSave splice", newData.splice(index, 1, { ...item, ...row }));
         setEmployees(newData);
-        // console.log("new", newData);
-        // console.log("oldDataStorage", oldDataStorage);
+        console.log("new", newData);
+        console.log("oldDataStorage", oldDataStorage);
         console.log("diff", diff([...oldDataStorage], newData));
         // console.log("diff", diff(oldDataStorage, newData)[0]);
         // console.log("diff check", diff(oldDataStorage, newData)[0].hasOwnProperty("description"));
         var changes = diff([...oldDataStorage], newData)[0];
-        console.log("changes=>", changes);
+        console.log("changes=>", diff([...oldDataStorage], newData));
         updateEmployee(changes, [...oldDataStorage], newData);
 
         // 2 өөр мэдээллийн хэсгийг өөрчлөх үед хүснэгт эвдэрч байгаа
-        // if(diff([...oldDataStorage], newData)[0].hasOwnProperty("description") === true) {
-        //     window.location.reload(true);
-        //     alert("Нэг удаад зөвхөн нэг л хүний мэдээллийг шинэчилнэ үү!");
-        // }
+        if(diff([...oldDataStorage], newData)[0].hasOwnProperty("description") === true) {
+            window.location.reload(true);
+            alert("Нэг удаад зөвхөн нэг л хүний мэдээллийг шинэчилнэ үү!");
+        }
     };
 
     const getColumnSearchProps = dataIndex => {
@@ -353,6 +370,7 @@ const ListEmployees = () => {
             return col;
         }
     
+        // console.log("col raw", col);
         return {
             ...col,
             onCell: (record) => ({
@@ -371,9 +389,9 @@ const ListEmployees = () => {
 
     return (
         <div style={{ flexDirection: "column", marginLeft: 10, marginRight: 10 }}>
-            <ButtonAnt>
+            {/* <ButtonAnt>
                 Баримт хэвлэх
-            </ButtonAnt>
+            </ButtonAnt> */}
             <ButtonAnt
                 style={{ 
                     marginTop: 10, 
