@@ -174,18 +174,9 @@ const AppointmentContainer = props => {
     const wrapperRef = useRef(null);
 
     useEffect(() => {
-        // console.log("update of search: ", search);
-        // console.log("object values: ", currentUser);
     }, [search]);
 
     useEffect(() => {
-        // db.collection("employees").doc(selectedDate).collection('appTime').get().then((querySnapshot) => {
-        //     querySnapshot.forEach((doc) => {
-        //         console.log(doc.data().value);
-        //         busyTimes.push(doc.data().value);
-        //     });
-        // });
-
         db.collection("patients")
             .get()
             .then((querySnapshot) => {
@@ -220,15 +211,10 @@ const AppointmentContainer = props => {
     const suggestionSelected = (obj) => {
         setSearch(obj.lname.charAt(0)+"."+obj.fname);
         setCurrentUser(obj);
-        // console.log("search---->", search);
-        // console.log("object---->", currentUser);
         setDisplay(false);
-        // setButtonText("Цаг өгөх");
     };
 
     const onTextChanged = e => {
-        // const items = documents;
-        // console.log("DOCUMENTS", documents);
         const value = e.target.value;
         setDisplay(true);
         if(value.length>0 && documents.length>0) {
@@ -238,7 +224,6 @@ const AppointmentContainer = props => {
             setButtonText("Үйлчлүүлэгчийг бүртгэх");
             setDisplay(false);
             setCurrentUser([]);
-            // console.log("documents length=> ", documents.length);
         }
         setSearch(value);
     };
@@ -251,7 +236,7 @@ const AppointmentContainer = props => {
                         {!displayNewPatientForm && (
                             <>
                                 <div className={css.Title}>
-                                    <h1>Цаг олгох</h1>
+                                    <h3>Цаг олгох</h3>
                                 </div>
                             
                                 <div className={css.FormControl}>
@@ -308,7 +293,7 @@ const AppointmentContainer = props => {
 const mapStateToProps = state => {
     return {
         userId: state.signupLoginReducer.userId,
-        userRole: state.signupLoginReducer.userRole,
+        permission: state.signupLoginReducer.permission,
         lname: state.signupLoginReducer.lname,
         fname: state.signupLoginReducer.fname,
         selectedRegNo: state.appointmentReducer.selectedRegNo,

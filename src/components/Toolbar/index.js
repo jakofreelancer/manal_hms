@@ -7,7 +7,7 @@ const Toolbar = props => (
     <nav className="navbar has-shadow is-primary">
         <div className="container">
             <Logo />
-            <ProfileToolbar />
+            <ProfileToolbar currentPermissionFromApp={props.currentPermissionFromApp}  setCurrentPermissionFromApp={props.setCurrentPermissionFromApp} />
         </div>
     </nav>
 

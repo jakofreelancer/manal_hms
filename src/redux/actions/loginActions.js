@@ -23,7 +23,7 @@ export const loginUser = (email, password) => {
                 const expiresIn = result.data.expiresIn;
                 const expireDate = new Date(new Date().getTime() + expiresIn * 1000);
                 const refreshToken = result.data.refreshToken;
-                var userRole = null;
+                var permission = null;
                 var fname = null;
                 var lname = null;
 
@@ -32,10 +32,19 @@ export const loginUser = (email, password) => {
                     .then((querySnapshot) => {
                         querySnapshot.forEach((doc) => {
                             // doc.data() is never undefined for query doc snapshots
-                            userRole = doc.data().userRole;
+                            var permissionArray = Object.entries(doc.data().permission);
+                            var allowedPermissions = permissionArray.filter(([key, value]) => value == true);
+                            var allowedPermissionsClr = [];
+
+                            for(var x=0; x<allowedPermissions.length; x++) {
+                                allowedPermissionsClr.push(allowedPermissions[x][0]);
+                            }
+
                             fname = doc.data().fname;
                             lname = doc.data().lname;
-                            localStorage.setItem("userRole", userRole);
+                            //redux reducer дээрх [a,b] массив нь текст болон хөрвүүлэгддэг "a,b" тул бүтцийг адилхан текст болгон хөрвүүлэв
+                            localStorage.setItem("permission", allowedPermissionsClr.toString());
+                            // console.log("how many values", allowedPermissionsClr.toString());
                             localStorage.setItem("token", token);
                             localStorage.setItem("userId", userId);
                             localStorage.setItem("expireDate", expireDate);
@@ -43,7 +52,7 @@ export const loginUser = (email, password) => {
                             localStorage.setItem("lname", lname);
                             localStorage.setItem("fname", fname);
 
-                            dispatch(loginUserSuccess(token, userId, userRole, lname, fname));
+                            dispatch(loginUserSuccess(token, userId, allowedPermissionsClr.toString(), lname, fname));
                         });
                     })
                     .catch((error) => {
@@ -51,7 +60,7 @@ export const loginUser = (email, password) => {
                     });
 
                 
-                // dispatch(loginUserSuccess(token, userId, userRole));
+                // dispatch(loginUserSuccess(token, userId, permission));
             })
             .catch(err => {
                 dispatch(loginUserError(err));
@@ -65,12 +74,12 @@ export const loginUserStart = () => {
     };
 };
 
-export const loginUserSuccess = (token, userId, userRole, lname, fname) => {
+export const loginUserSuccess = (token, userId, permission, lname, fname) => {
     return {
         type: "LOGIN_USER_SUCCESS",
         token,
         userId,
-        userRole,
+        permission,
         lname,
         fname
     };
@@ -84,13 +93,14 @@ export const loginUserError = (error) => {
 };
 
 export const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("expireDate");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("userRole");
-    localStorage.removeItem("lname");
-    localStorage.removeItem("fname");
+    localStorage.clear();
+    // localStorage.removeItem("token");
+    // localStorage.removeItem("userId");
+    // localStorage.removeItem("expireDate");
+    // localStorage.removeItem("refreshToken");
+    // localStorage.removeItem("permission");
+    // localStorage.removeItem("lname");
+    // localStorage.removeItem("fname");
     
     return {
         type: "LOGOUT"

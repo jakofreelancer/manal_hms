@@ -5,7 +5,7 @@ const initialState = {
     authServerErrorCode: null,
     token: null,
     userId: null,
-    userRole: null
+    permission: null
 };
 
 const reducer = (state = initialState, action) => {
@@ -20,7 +20,7 @@ const reducer = (state = initialState, action) => {
             saving: false,
             token: action.token,
             userId: action.userId,
-            userRole: action.userRole,
+            permission: action.permission,
             lname: action.lname,
             fname: action.fname
         };
@@ -42,7 +42,7 @@ const reducer = (state = initialState, action) => {
             logginIn: false,
             token: action.token,
             userId: action.userId,
-            userRole: action.userRole,
+            permission: action.permission,
             lname: action.lname,
             fname: action.fname
         };

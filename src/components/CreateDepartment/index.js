@@ -23,7 +23,7 @@ const CreateDepartment = () => {
         fname: "",
         regNo: "",
         phoneNo: "",
-        userRole: "",
+        permission: "",
         password1: "",
         password2: "",
         description: "",
@@ -169,10 +169,9 @@ const CreateDepartment = () => {
 
     return (
         <div className={css.Container}>
-            <SelectComponent label="Эмнэлэг сонгох" options={optionsHospitals} onchangefunc={(e) => {setEmployeeInfo({...employeeInfo, userRole: e.value})}} />
+            <SelectComponent label="Эмнэлэг сонгох" options={optionsHospitals} onchangefunc={(e) => {setEmployeeInfo({...employeeInfo, permission: e.value})}} />
 
-            <TextBox 
-                label="Тасгийн нэр"
+            <TextBox label="Тасгийн нэр"
                 name="departmentName"
                 setComponentInfo={setDepartmentInfo}
                 componentInfo={departmentInfo["departmentName"]}
@@ -195,8 +194,7 @@ const CreateDepartment = () => {
                 setFormCheck={setFormCheck}
                 formCheckInfo={formCheck} /> */}
             
-            <TextBox 
-                label="Тасгийн Утас"
+            <TextBox label="Тасгийн Утас"
                 name="departmentPhoneNo"
                 setComponentInfo={setDepartmentInfo}
                 componentInfo={departmentInfo["departmentPhoneNo"]}
@@ -219,8 +217,7 @@ const CreateDepartment = () => {
                 setFormCheck={setFormCheck}
                 formCheckInfo={formCheck} /> */}
 
-            <TextBox 
-                label="Тасгийн Имэйл"
+            <TextBox label="Тасгийн Имэйл"
                 name="departmentEmail"
                 setComponentInfo={setDepartmentInfo}
                 componentInfo={departmentInfo["departmentEmail"]}
@@ -231,10 +228,9 @@ const CreateDepartment = () => {
                 setFormCheck={setFormCheck}
                 formCheckInfo={formCheck} />
 
-            <SelectComponent label="Тасгийн эрхлэгч" options={optionsEmployees} onchangefunc={(e) => {setEmployeeInfo({...employeeInfo, userRole: e.value})}} />
+            <SelectComponent label="Тасгийн эрхлэгч" options={optionsEmployees} onchangefunc={(e) => {setEmployeeInfo({...employeeInfo, permissions: e.value})}} />
 
-            <TextBox 
-                label="Тайлбар"
+            <TextBox label="Тайлбар"
                 name="description"
                 setComponentInfo={setDepartmentInfo}
                 componentInfo={departmentInfo["description"]}

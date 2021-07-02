@@ -2,17 +2,17 @@ import axios from "axios";
 import { db } from "../../firebase";
 
 export const signupUser = ( uId, 
-                            email, 
-                            password, 
-                            lname, 
-                            fname, 
-                            regNo, 
-                            phoneNo, 
-                            description, 
-                            userRole,
-                            createdDate, 
-                            modifiedDate
-                        ) => {
+        email, 
+        password, 
+        lname, 
+        fname, 
+        regNo, 
+        phoneNo, 
+        description, 
+        permission,
+        createdDate, 
+        modifiedDate
+    ) => {
     return function(dispatch) {
         dispatch(signupUserStart());
 
@@ -25,7 +25,7 @@ export const signupUser = ( uId,
             regNo,
             phoneNo,
             description,
-            userRole,
+            permission,
             createdDate,
             modifiedDate,
             returnSecureToken: true
@@ -40,7 +40,7 @@ export const signupUser = ( uId,
             regNo,
             phoneNo,
             description,
-            userRole,
+            permission,
             createdDate,
             modifiedDate,
             returnSecureToken: true
@@ -62,11 +62,11 @@ export const signupUser = ( uId,
                 localStorage.setItem("userId", userId);
                 localStorage.setItem("expireDate", expireDate);
                 localStorage.setItem("refreshToken", refreshToken);
-                localStorage.setItem("userRole", userRole);
+                localStorage.setItem("permission", permission);
                 localStorage.setItem("lname", lname);
                 localStorage.setItem("fname", fname);
 
-                dispatch(signupUserSuccess(token, userId, userRole, lname, fname));
+                dispatch(signupUserSuccess(token, userId, permission, lname, fname));
             })
             .catch(err => {
                 dispatch(signupUserError(err));
@@ -80,12 +80,12 @@ export const signupUserStart = () => {
     };
 };
 
-export const signupUserSuccess = (token, userId, userRole, lname, fname) => {
+export const signupUserSuccess = (token, userId, permission, lname, fname) => {
     return {
         type: "SIGNUP_USER_SUCCESS",
         token,
         userId,
-        userRole,
+        permission,
         lname,
         fname
     };

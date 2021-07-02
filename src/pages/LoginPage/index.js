@@ -118,7 +118,7 @@ const mapStateToProps = state => {
     authServerError: state.signupLoginReducer.authServerError,
     authServerErrorCode: state.signupLoginReducer.authServerErrorCode,
     userId: state.signupLoginReducer.userId,
-    userRole: state.signupLoginReducer.userRole
+    permission: state.signupLoginReducer.permission
   };
 };
 

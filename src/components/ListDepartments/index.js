@@ -5,34 +5,18 @@ import { Table, Input, Button as ButtonAnt, Space } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { Excel } from "antd-table-saveas-excel";
+import PDFIncome from "../../components/PDFIncome";
+import Pdf from "react-to-pdf";
 
-const ListDepartment = () => {
-    const [departments, setDepartments] = useState([]);
+const ListDepartments = () => {
+    // const [loading, setLoading] = useState(true);
+    const [departments, setDepartments] = useState(null);
     const [searchText, setSearchText] = useState("");
     const [searchedColumn, setSearchedColumn] = useState("");
     const searchInput = useRef(null);
     const tempStorage = [];
-
-    const fetchData = async () => {
-        let departmentsRef = db.collection("departments")
-        let dataRef = await departmentsRef.get();
-        dataRef.docs.map(department => {
-            let currentID = department.id;
-            let dateCreated = department.data().createdDate.toDate();
-            let dateModified = department.data().modifiedDate.toDate();
-            dateCreated = dateCreated.getUTCDate()+"/"+(dateCreated.getMonth()+1)+"/"+dateCreated.getUTCFullYear();
-            dateModified = dateModified.getUTCDate()+"/"+(dateModified.getMonth()+1)+"/"+dateModified.getUTCFullYear();
-            let dataStorage = { 
-                ...department.data(), 
-                ['id']: currentID, 
-                ['createdDateFormatted']: dateCreated,
-                ['modifiedDateFormatted']: dateModified,
-            };
-            tempStorage.push(dataStorage);
-        });
-
-        setDepartments(tempStorage);
-    };
+    const [isPrintPdf, setIsPrintPdf] = useState(false);
+    const refPDFIncome = React.createRef();
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
@@ -65,12 +49,12 @@ const ListDepartment = () => {
                             icon={<SearchOutlined />}
                             size="small"
                             style={{ width: 90 }} >
-                            Search
+                            Шүүх
                         </ButtonAnt>
                         <ButtonAnt onClick={() => handleReset(clearFilters)} size="small" style={{ width: 90 }}>
-                            Reset
+                            Арилгах
                         </ButtonAnt>
-                        <ButtonAnt 
+                        {/* <ButtonAnt 
                             type="link"
                             size="small"
                             onClick={() => {
@@ -78,8 +62,8 @@ const ListDepartment = () => {
                                 setSearchText(selectedKeys[0]);
                                 setSearchedColumn(dataIndex);
                             }} >
-                            Filter
-                        </ButtonAnt>
+                            Шүүх
+                        </ButtonAnt> */}
                     </Space>
                 </div>
             ),
@@ -119,21 +103,21 @@ const ListDepartment = () => {
             title: "Тасгийн нэр",
             dataIndex: "departmentName",
             key: "key",
-            // width: "15%",
+            // width: "10%",
             ...getColumnSearchProps("departmentName"),
         },
         {
             title: "Тасгийн имэйл",
             dataIndex: "departmentEmail",
             key: "key",
-            // width: "15%",
+            // width: "10%",
             ...getColumnSearchProps("departmentEmail"),
         },
         {
             title: "Тасгийн утас",
             dataIndex: "departmentPhoneNo",
             key: "key",
-            // width: "15%",
+            // width: "10%",
             ...getColumnSearchProps("departmentPhoneNo"),
         },
         {
@@ -161,7 +145,7 @@ const ListDepartment = () => {
             title: "Утас",
             dataIndex: "phoneNo",
             key: "key",
-            // width: "10%",
+            // width: "5%",
             ...getColumnSearchProps("phoneNo"),
         },
         {
@@ -175,44 +159,96 @@ const ListDepartment = () => {
             title: "Өөрчилсөн",
             dataIndex: "modifiedDateFormatted",
             key: "key",
-            // width: "10%",
+            // width: "5%",
             ...getColumnSearchProps("modifiedDateFormatted"),
         },
     ];
+
+    const fetchData = async () => {
+        let departmentsRef = db.collection("departments");
+        let dataRef = await departmentsRef.get();
+        
+        dataRef.docs.map(department => {
+            let currentID = department.id;
+            let dateCreated = department.data().createdDate.toDate();
+            let dateModified = department.data().modifiedDate.toDate();
+            dateCreated = dateCreated.getUTCDate()+"/"+(dateCreated.getMonth()+1)+"/"+dateCreated.getUTCFullYear();
+            dateModified = dateModified.getUTCDate()+"/"+(dateModified.getMonth()+1)+"/"+dateModified.getUTCFullYear();
+            let dataStorage = { 
+                ...department.data(), 
+                ['id']: currentID, 
+                ['createdDateFormatted']: dateCreated,
+                ['modifiedDateFormatted']: dateModified,
+            };
+            // console.log("DATASTORAGE=>", dataStorage);
+            tempStorage.push(dataStorage);
+        })
+
+        setDepartments(tempStorage);
+    };
 
     useEffect(() => {
         fetchData();
     }, []);
 
-    return (
-        <div style={{ flexDirection: "column", marginLeft: 10, marginRight: 10 }}>
-            <ButtonAnt
-                style={{ 
-                    marginTop: 10, 
-                    float: "right", 
-                    marginRight: 10, 
-                    backgroundColor: "#4cbbb9", 
-                    borderColor: "#4cbbb9",
-                    color: "white",
-                    borderRadius: 5,
-                }}
-                onClick={() => {
-                    const excel = new Excel();
-                    excel
-                        .addSheet("Sheet1")
-                        .addColumns(columns)
-                        .addDataSource(departments)
-                        .saveAs("ListDepartments.xlsx")
-                }} >
-                Экспортлох
-            </ButtonAnt>
-            <Table
-                dataSource={departments}
-                columns={columns}
-                pagination={{ pageSize: 50 }} 
-                scroll={{ y: 240 }} exportable />
-        </div>
-    )
+    if(departments===null) {
+        return (
+            <div>Loading...</div>
+        )
+    } else {
+        return (
+            <div style={{ flexDirection: "column", marginLeft: 10, marginRight: 10 }}>
+                {/* PDF хэвлэх талбар энд байрлана */}
+                <div className="Post" ref={refPDFIncome}>
+                    <PDFIncome data={departments} />
+                </div>
+
+                <Pdf targetRef={refPDFIncome} filename="income.pdf">
+                    {({ toPdf }) => 
+                        <ButtonAnt 
+                            style={{
+                                marginTop: 10,
+                                marginRight: 10,
+                                float: "right",
+                                backgroundColor: "#4cbbb9", 
+                                borderColor: "#4cbbb9",
+                                color: "white",
+                                borderRadius: 5,
+                            }}
+                            onClick={toPdf}>Capture as PDF
+                        </ButtonAnt>
+                    }
+                </Pdf>
+                <ButtonAnt
+                    style={{ 
+                        marginTop: 10, 
+                        float: "right", 
+                        marginRight: 10, 
+                        backgroundColor: "#4cbbb9", 
+                        borderColor: "#4cbbb9",
+                        color: "white",
+                        borderRadius: 5,
+                    }}
+                    onClick={() => {
+                        const excel = new Excel();
+                        excel
+                            .addSheet("Sheet1")
+                            .addColumns(columns)
+                            .addDataSource(departments)
+                            .saveAs("ListDepartments.xlsx")
+                    }} >
+                    Экспортлох
+                </ButtonAnt>
+                <Table
+                    dataSource={departments}
+                    columns={columns}
+                    pagination={{ pageSize: 50 }} 
+                    scroll={{ y: 240 }} exportable />
+                {!isPrintPdf ? "" :
+                <PDFIncome />}
+            </div>
+        )
+    }
 };
 
-export default ListDepartment;
+export default ListDepartments;

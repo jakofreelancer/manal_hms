@@ -13,7 +13,7 @@ const HospitalSettings = () => {
         phoneNo: "",
         password: "",
         email: "",
-        userRole: "",
+        permission: "",
         // createdDate: "",
         // modifiedDate: "",
         description: ""
@@ -26,7 +26,7 @@ const HospitalSettings = () => {
         phoneNo: "",
         password: "",
         email: "",
-        userRole: "",
+        permission: "",
         description: ""
     });
 
@@ -38,7 +38,7 @@ const HospitalSettings = () => {
             phoneNo: true,
             password: true,
             email: true,
-            userRole: true,
+            permission: true,
             description: true
         // },
     });
@@ -46,8 +46,7 @@ const HospitalSettings = () => {
     return (
         <>
             <div className={css.Container}>
-                <TextBox 
-                    label="Овог*" 
+                <TextBox label="Овог*" 
                     name="lName" 
                     setComponentInfo={setHospitalInfo} 
                     componentInfo={hospitalInfo['lname']}
@@ -58,8 +57,7 @@ const HospitalSettings = () => {
                     setFormCheck={setFormCheck}
                     formCheckInfo={formCheck} />
 
-                <TextBox 
-                    label="Нэр*" 
+                <TextBox label="Нэр*" 
                     name="fName" 
                     setComponentInfo={setHospitalInfo} 
                     componentInfo={hospitalInfo['fname']}
@@ -70,8 +68,7 @@ const HospitalSettings = () => {
                     setFormCheck={setFormCheck}
                     formCheckInfo={formCheck} />
 
-                <TextBox 
-                    label="Утас*" 
+                <TextBox label="Утас*" 
                     name="phoneNo" 
                     setComponentInfo={setHospitalInfo} 
                     componentInfo={hospitalInfo['phoneNo']}
@@ -82,8 +79,7 @@ const HospitalSettings = () => {
                     setFormCheck={setFormCheck}
                     formCheckInfo={formCheck} />
 
-                <TextBox 
-                    label="Имэйл*" 
+                <TextBox label="Имэйл*" 
                     name="email" 
                     setComponentInfo={setHospitalInfo} 
                     componentInfo={hospitalInfo['email']}
@@ -94,8 +90,7 @@ const HospitalSettings = () => {
                     setFormCheck={setFormCheck}
                     formCheckInfo={formCheck} />
 
-                <TextBox 
-                    label="Нууц үг*" 
+                <TextBox label="Нууц үг*" 
                     name="password1" 
                     setComponentInfo={setHospitalInfo} 
                     componentInfo={hospitalInfo['password1']}
@@ -106,8 +101,7 @@ const HospitalSettings = () => {
                     setFormCheck={setFormCheck}
                     formCheckInfo={formCheck} />
 
-                <TextBox 
-                    label="Нууц үг давтах*" 
+                <TextBox label="Нууц үг давтах*" 
                     name="password2" 
                     setComponentInfo={setHospitalInfo} 
                     componentInfo={hospitalInfo['password2']}
@@ -127,8 +121,7 @@ const HospitalSettings = () => {
                     setFormCheck={setFormCheck}
                     formCheckInfo={formCheck} /> */}
 
-                <TextBox 
-                    label="Тайлбар" 
+                <TextBox label="Тайлбар" 
                     name="description" 
                     setComponentInfo={setHospitalInfo} 
                     componentInfo={hospitalInfo['description']}

@@ -2,42 +2,86 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import { BrowserRouter } from 'react-router-dom';
-import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+// import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+// import { persistStore, persistReducer } from 'redux-persist/lib/storage';
 import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
+
+import { store, persistor } from "./store";
+
+// import thunk from 'redux-thunk';
 import App from './pages/App';
 import reportWebVitals from "./reportWebVitals";
+import EditableTable from "./components/ListEmployees";
 
-import signupLoginReducer from "./redux/reducer/signupLoginReducer";
-import appointmentReducer from "./redux/reducer/appointmentReducer";
+// import signupLoginReducer from "./redux/reducer/signupLoginReducer";
+// import appointmentReducer from "./redux/reducer/appointmentReducer";
+// import permissionSelectorReducer from "./redux/reducer/permissionSelectorReducer";
+// import storage from "redux-persist/lib/storage";
+import { PersistGate } from 'redux-persist/lib/integration/react';
 
-const loggerMiddleware = store => {
-  return next => {
-    return action => {
-        console.log("MyLoggerMiddleware: Dispatching ==> ", action);
-        console.log("MyLoggerMiddleware: State before : ", store.getState());
-        const result = next(action);
-        console.log("MyLoggerMiddleware: State after : ", store.getState());
-        return result;
-    };
-  };
-};
+// const loggerMiddleware = store => {
+//   return next => {
+//     return action => {
+//         console.log("MyLoggerMiddleware: Dispatching ==> ", action);
+//         console.log("MyLoggerMiddleware: State before : ", store.getState());
+//         const result = next(action);
+//         console.log("MyLoggerMiddleware: State after : ", store.getState());
+//         return result;
+//     };
+//   };
+// };
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+// const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const reducers = combineReducers({
-  signupLoginReducer,
-  appointmentReducer
-});
+// const persistConfig = {
+//   key: 'root',
+//   storage,
+//   whitelist: ['permission']
+// }
 
-const middlewares = [loggerMiddleware, thunk];
+// const rootReducer = combineReducers({
+//   login: signupLoginReducer,
+//   appointment: appointmentReducer,
+//   permission: permissionSelectorReducer
+// });
 
-const store = createStore(reducers, composeEnhancers(applyMiddleware(...middlewares)));
+// export default persistReducer(persistConfig, rootReducer)
+
+// const reducers = combineReducers({
+//   auth: () => ({ mock: true }),
+//   form: persistReducer(
+//     {
+//       key: "form", // key for localStorage key, will be: "persist:form"
+//       storage,
+//       debug: true,
+//       blacklist: ['permission'],
+//     },
+//     {
+//       signupLoginReducer,
+//       appointmentReducer,
+//       permissionSelectorReducer
+//     }
+//   ), });
+
+// const middlewares = [loggerMiddleware, thunk];
+
+// const store = createStore(persistReducer({
+//   key: "root",
+//     debug: true,
+//     storage,
+//     whitelist: ['auth'],
+// }, reducers), composeEnhancers(applyMiddleware(...middlewares)));
+
+// const persistor = persistStore(store, null, () => {
+//   console.log("restoredState", store.getState());
+// });
 
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-      <App />
+      <PersistGate persistor={persistor}>
+        <App />
+      </PersistGate>
     </BrowserRouter>
   </Provider>,
   document.getElementById('root')

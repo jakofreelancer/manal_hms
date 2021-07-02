@@ -12,18 +12,7 @@ import SelectComponent from '../../components/General/SelectComponent';
 //import css from "./style.module.css";
 
 const Signup = props => {
-    const [email, setEmail] = useState("");
-    const [password1, setPassword1] = useState("");
-    const [password2, setPassword2] = useState("");
     const [error, setError] = useState("");
-    const [lname, setLname] = useState("");
-    const [fname, setFname] = useState("");
-    const [regNo, setRegNo] = useState("");
-    const [phoneNo, setPhoneNo] = useState("");
-    const [description, setDescription] = useState("");
-    const [userRole, setUserRole] = useState("");
-    // const [createdDate, setCreatedDate] = useState("");
-    // const [modifiedDate, setModifiedDate] = useState("");
     const optionsUserRole = [
         {value: "admin", label: "Админ"},
         {value: "reception", label: "Ресепшн"},
@@ -36,10 +25,16 @@ const Signup = props => {
         fname: "",
         regNo: "",
         phoneNo: "",
-        userRole: "",
+        permission: "",
         password1: "",
         password2: "",
         description: "",
+        permission: {
+            admin: false,
+            systemadmin: false,
+            doctor: false,
+            reception: false,
+        },
     });
 
     const [formCheck, setFormCheck] = useState({
@@ -49,7 +44,7 @@ const Signup = props => {
         fname: true,
         regNo: true,
         phoneNo: true,
-        userRole: true,
+        permission: true,
         password1: true,
         password2: true,
         description: "",
@@ -64,7 +59,7 @@ const Signup = props => {
             .auth()
             .createUserWithEmailAndPassword(employeeInfo.email, employeeInfo.password1)
             .then((user) => {
-                console.log("3. inside of fb function!");
+                // console.log("3. inside of fb function!");
                 resetInput();
                 props.signupUser(
                     user.user.uid, 
@@ -75,7 +70,7 @@ const Signup = props => {
                     employeeInfo.regNo, 
                     employeeInfo.phoneNo, 
                     employeeInfo.description, 
-                    employeeInfo.userRole, 
+                    employeeInfo.permission, 
                     currentDate, 
                     currentDate
                 );
@@ -89,10 +84,39 @@ const Signup = props => {
             });
     };
 
+    const resetInput = () => {
+        alert("resetInput worked!");
+        console.log("4. resetInput worked!");
+        setEmployeeInfo({...employeeInfo, 
+            email: "", 
+            password1: "",
+            password2: "",
+            lname: "",
+            fname: "",
+            regNo: "",
+            phoneNo: "",
+            description: ""
+        });
+    };
+
+    const handleCheckbox = e => {
+        console.log("e.target.value=>", e.target.value);
+    }
+    
+    const onChange = e => {
+        var {name, checked} = e.target;
+
+        setEmployeeInfo(prevAttributes => ({
+            ...prevAttributes,
+            permission: { ...prevAttributes.permission, [name]: checked }
+        }));
+            // {...employeeInfo, permission: {...permission, admin: true}})
+        console.log("e.target.value=>", e.target.name, e.target.checked);
+    }
+
     const submit = (e) => {
         console.log("1. abc", employeeInfo);
-        console.log("pass1", employeeInfo.password1);
-        console.log("pass2", employeeInfo.password2);
+        console.log(employeeInfo.permission);
 
         if(employeeInfo.password1 === employeeInfo.password2) {
             console.log("2. inside of if");
@@ -105,39 +129,22 @@ const Signup = props => {
         console.log(error.error);
     };
 
-    const resetInput = () => {
-        alert("resetInput worked!");
-        console.log("4. resetInput worked!");
-        setEmployeeInfo({...employeeInfo, email: ""});
-        setEmployeeInfo({...employeeInfo, password1: ""});
-        setEmployeeInfo({...employeeInfo, password2: ""});
-        setEmployeeInfo({...employeeInfo, lname: ""});
-        setEmployeeInfo({...employeeInfo, fname: ""});
-        setEmployeeInfo({...employeeInfo, regNo: ""});
-        setEmployeeInfo({...employeeInfo, phoneNo: ""});
-        setEmployeeInfo({...employeeInfo, description: ""});
-    };
-
-    const onChange = e => {
-        // console.log("testing select change: ", e.value, userRole);
-    };
-
     var jumpPage = null;
     
-    if(props.userId) {
-        switch(props.userRole) {
-            case "doctor" :
-                jumpPage = <Redirect to='/doctor' />;
-                break;
+    // if(props.userId) {
+    //     switch(props.permission) {
+    //         case "doctor" :
+    //             jumpPage = <Redirect to='/doctor' />;
+    //             break;
 
-            case "reception" :
-                jumpPage = <Redirect to='/reception' />;
-                break;
+    //         case "reception" :
+    //             jumpPage = <Redirect to='/reception' />;
+    //             break;
 
-            default:
-                jumpPage = <Redirect to='/home' />;
-        };
-    };
+    //         default:
+    //             jumpPage = <Redirect to='/home' />;
+    //     };
+    // };
 
     return (
         <div className={css.Container}>
@@ -146,8 +153,7 @@ const Signup = props => {
 
             } */}
 
-            <TextBox 
-                label="Имэйл" 
+            <TextBox label="Имэйл" 
                 name="email"
                 type="email"
                 setComponentInfo={setEmployeeInfo}
@@ -158,8 +164,7 @@ const Signup = props => {
                 allwarnings={formErrors}
                 setFormCheck={setFormCheck}
                 formCheckInfo={formCheck} />
-            <TextBox 
-                label="Овог"
+            <TextBox label="Овог"
                 name="lName"
                 setComponentInfo={setEmployeeInfo}
                 componentInfo={employeeInfo["lname"]}
@@ -169,8 +174,7 @@ const Signup = props => {
                 allwarnings={formErrors}
                 setFormCheck={setFormCheck}
                 formCheckInfo={formCheck} />
-            <TextBox 
-                label="Нэр" 
+            <TextBox label="Нэр" 
                 name="fName" 
                 setComponentInfo={setEmployeeInfo}
                 componentInfo={employeeInfo["fname"]}
@@ -180,8 +184,7 @@ const Signup = props => {
                 allwarnings={formErrors}
                 setFormCheck={setFormCheck}
                 formCheckInfo={formCheck} />
-            <TextBox 
-                label="Регистрийн дугаар" 
+            <TextBox label="Регистрийн дугаар" 
                 name="regNo"
                 setComponentInfo={setEmployeeInfo}
                 componentInfo={employeeInfo["regNo"]}
@@ -191,8 +194,7 @@ const Signup = props => {
                 allwarnings={formErrors}
                 setFormCheck={setFormCheck}
                 formCheckInfo={formCheck} />
-            <TextBox 
-                label="Утас" 
+            <TextBox label="Утас" 
                 name="phoneNo"
                 setComponentInfo={setEmployeeInfo}
                 componentInfo={employeeInfo["phoneNo"]}
@@ -202,9 +204,16 @@ const Signup = props => {
                 allwarnings={formErrors}
                 setFormCheck={setFormCheck}
                 formCheckInfo={formCheck} />
-            <SelectComponent label="Хэрэглэгчийн эрх" options={optionsUserRole} onchangefunc={(e) => {setEmployeeInfo({...employeeInfo, userRole: e.value}); onChange(e)}} />
-            <TextBox 
-                label="Тайлбар" 
+            {/* Энд permission checkbox хийж inputvalue-г submit үед console-оор шалгах */}
+            <hr/>
+                <div>
+                    <input type="checkbox" name="admin" onChange={e => onChange(e)} />Эрхлэгч
+                    <input type="checkbox" name="doctor" onChange={e => onChange(e)} />Эмч
+                    <input type="checkbox" name="reception" onChange={e => onChange(e)} />Ресепшн
+                </div>
+            <hr/>
+            {/* <SelectComponent label="Хэрэглэгчийн эрх" options={optionsUserRole} onchangefunc={(e) => {setEmployeeInfo({...employeeInfo, permission: e.value}); onChange(e)}} /> */}
+            <TextBox label="Тайлбар" 
                 name="description"
                 setComponentInfo={setEmployeeInfo}
                 componentInfo={employeeInfo["description"]}
@@ -214,8 +223,7 @@ const Signup = props => {
                 allwarnings={formErrors}
                 setFormCheck={setFormCheck}
                 formCheckInfo={formCheck} />
-            <TextBox 
-                label="Нууц үг" 
+            <TextBox label="Нууц үг" 
                 name="password1" 
                 type="password"
                 setComponentInfo={setEmployeeInfo}
@@ -226,8 +234,7 @@ const Signup = props => {
                 allwarnings={formErrors}
                 setFormCheck={setFormCheck}
                 formCheckInfo={formCheck} />
-            <TextBox 
-                label="Нууц үг давтах" 
+            <TextBox label="Нууц үг давтах" 
                 name="password2"
                 type="password"
                 setComponentInfo={setEmployeeInfo}
@@ -257,35 +264,36 @@ const mapStateToProps = state => {
         authServerError: state.signupLoginReducer.authServerError,
         authServerErrorCode: state.signupLoginReducer.authServerErrorCode,
         userId: state.signupLoginReducer.userId,
-        userRole: state.signupLoginReducer.userRole
+        permission: state.signupLoginReducer.permission
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
         signupUser: (   uId,
-                        email, 
-                        password, 
-                        lname, 
-                        fname, 
-                        regNo, 
-                        phoneNo, 
-                        description, 
-                        userRole,
-                        createdDate, 
-                        modifiedDate
-                    ) => 
+            email, 
+            password, 
+            lname, 
+            fname, 
+            regNo, 
+            phoneNo, 
+            description, 
+            permission,
+            createdDate, 
+            modifiedDate
+        ) => 
             dispatch(actions.signupUser(uId,
-                                        email, 
-                                        password, 
-                                        lname, 
-                                        fname, 
-                                        regNo, 
-                                        phoneNo, 
-                                        description, 
-                                        userRole,
-                                        createdDate, 
-                                        modifiedDate))
+                email, 
+                password, 
+                lname, 
+                fname, 
+                regNo, 
+                phoneNo, 
+                description, 
+                permission,
+                createdDate, 
+                modifiedDate
+            ))
     };
 };
 
